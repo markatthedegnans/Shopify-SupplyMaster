@@ -1,0 +1,33 @@
+/* Workspace markdown preview styling for improved readability */
+body {
+  font-family: Georgia, 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial;
+  font-size: 15px;
+  line-height: 1.7;
+  color: #222;
+  max-width: 900px;
+  margin: 1.6rem auto;
+  padding: 0 1rem;
+  background: transparent;
+}
+
+p { margin: 0.8rem 0; }
+
+
+h1, h2, h3, h4 { line-height: 1.2; margin-top: 1.6rem; margin-bottom: 0.6rem; font-weight: 600; }
+
+code { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; background: #f6f8fa; border-radius: 4px; padding: 0.12rem 0.28rem; }
+pre { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; background: #f6f8fa; border-radius: 6px; padding: 1rem; overflow: auto; }
+
+blockquote { border-left: 4px solid #e1e4e8; margin: 0; padding: 0.6rem 1rem; color: #586069; background: #f8f9fa; }
+
+table { border-collapse: collapse; width: 100%; margin: 0.6rem 0; }
+table th, table td { border: 1px solid #e1e4e8; padding: 10px 12px; }
+table th { background: #f6f8fa; font-weight: 600; text-align: left; }
+
+img { max-width: 100%; height: auto; display: block; margin: 0.6rem 0; }
+
+/* Make lists easier to scan */
+ul, ol { padding-left: 1.2rem; margin: 0.6rem 0; }
+
+/* Improve footnote and small text legibility */
+.footnotes { font-size: 0.95em; color: #444; }

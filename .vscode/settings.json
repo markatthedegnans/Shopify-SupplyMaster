@@ -1,0 +1,38 @@
+{
+    "markdown.preview.fontFamily": "Georgia, 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial",
+    "markdown.preview.fontSize": 15,
+    "markdown.preview.lineHeight": 1.7,
+    "markdown.preview.fontWeight": "400",
+    "markdown.styles": [
+        ".vscode/markdown.css"
+    ],
+    "markdown-preview-enhanced.previewTheme": "github-light.css",
+    "markdown-preview-enhanced.customStyle": ".vscode/markdown.css",
+
+    // Ensure ALL .md files in this workspace are treated as Markdown
+    "files.associations": {
+        "*.md": "markdown"
+    },
+
+    // Markdown-specific editor settings for the workspace
+    "[markdown]": {
+        "editor.formatOnSave": true,
+        "editor.wordWrap": "on"
+    },
+
+    // Open markdown files using the built-in Markdown preview by default
+    "workbench.editorAssociations": {
+        "0": {
+            "viewType": "vscode.markdown.preview.editor",
+            "filenamePattern": "**/*.md"
+        },
+        "1": {
+            "viewType": "markdown.preview",
+            "filenamePattern": "**/*.md"
+        },
+        "*.copilotmd": "vscode.markdown.preview.editor",
+        "*.md": "vscode.markdown.preview.editor"
+    },
+
+    "markdown.validate.enabled": true
+}

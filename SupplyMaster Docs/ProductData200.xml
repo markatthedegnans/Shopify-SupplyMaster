@@ -1,0 +1,603 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:s3="http://www.promostandards.org/WSDL/ProductDataService/1.0.0/" xmlns:tns="http://www.promostandards.org/WSDL/ProductDataService/2.0.0/" xmlns:s2="http://www.promostandards.org/WSDL/ProductDataService/1.0.0/SharedObjects/" xmlns:s1="http://www.promostandards.org/WSDL/ProductDataService/2.0.0/SharedObjects/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" targetNamespace="http://www.promostandards.org/WSDL/ProductDataService/2.0.0/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.promostandards.org/WSDL/ProductDataService/2.0.0/">
+      <s:import namespace="http://www.promostandards.org/WSDL/ProductDataService/2.0.0/SharedObjects/" />
+      <s:import namespace="http://www.promostandards.org/WSDL/ProductDataService/1.0.0/SharedObjects/" />
+      <s:import namespace="http://www.promostandards.org/WSDL/ProductDataService/1.0.0/" />
+      <s:element name="GetProductRequest" nillable="true" type="tns:GetProductRequest" />
+      <s:complexType name="GetProductRequest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:wsVersion" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:id" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:password" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:localizationCountry" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:localizationLanguage" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:productId" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:partId" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:colorName" />
+          <s:element minOccurs="0" maxOccurs="unbounded" ref="s1:ApparelSizeArray" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetProductResponse" type="tns:GetProductResponse" />
+      <s:complexType name="GetProductResponse">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ServiceMessageArray" type="tns:ArrayOfServiceMessage" />
+          <s:element minOccurs="0" maxOccurs="1" name="Product" type="tns:ProductObject" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfServiceMessage">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ServiceMessage" nillable="true" type="tns:ServiceMessage" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ServiceMessage">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="code" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="description" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="severity" type="tns:Severitys" />
+          <s:element minOccurs="0" maxOccurs="1" name="stacktrace" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="Severitys">
+        <s:restriction base="s:string">
+          <s:enumeration value="Error" />
+          <s:enumeration value="Information" />
+          <s:enumeration value="Warning" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="ProductObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:productId" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:productName" />
+          <s:element minOccurs="0" maxOccurs="unbounded" ref="s1:description" />
+          <s:element minOccurs="1" maxOccurs="1" ref="s1:priceExpiresDate" />
+          <s:element minOccurs="0" maxOccurs="1" name="ProductKeywordArray" type="s1:ArrayOfProductKeywordObject" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:productBrand" />
+          <s:element minOccurs="1" maxOccurs="1" name="export" nillable="true" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="ProductCategoryArray" type="s1:ArrayOfProductCategoryObject" />
+          <s:element minOccurs="0" maxOccurs="1" name="RelatedProductArray" type="s1:ArrayOfRelatedProductObject" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:primaryImageURL" />
+          <s:element minOccurs="0" maxOccurs="1" name="ProductPriceGroupArray" type="s1:ArrayOfProductPriceGroup" />
+          <s:element minOccurs="1" maxOccurs="1" ref="s1:complianceInfoAvailable" />
+          <s:element minOccurs="1" maxOccurs="1" name="unspscCommodityCode" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="LocationDecorationArray" type="tns:ArrayOfLocationDecoration" />
+          <s:element minOccurs="0" maxOccurs="1" name="ProductPartArray" type="tns:ArrayOfProductPartObject" />
+          <s:element minOccurs="1" maxOccurs="1" name="lastChangeDate" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="creationDate" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" ref="s1:endDate" />
+          <s:element minOccurs="1" maxOccurs="1" ref="s1:effectiveDate" />
+          <s:element minOccurs="1" maxOccurs="1" ref="s1:isCaution" />
+          <s:element minOccurs="0" maxOccurs="1" name="cautionComment" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" ref="s1:isCloseout" />
+          <s:element minOccurs="0" maxOccurs="1" name="lineName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="defaultSetUpCharge" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="defaultRunCharge" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="imprintSize" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FobPointArray" type="tns:ArrayOfFobPoint" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfLocationDecoration">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="LocationDecoration" nillable="true" type="tns:LocationDecoration" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="LocationDecoration">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="locationName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="decorationName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="locationDecorationComboDefault" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="priceIncludes" type="s:boolean" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfProductPartObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ProductPart" nillable="true" type="tns:ProductPartObject" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ProductPartObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:partId" />
+          <s:element minOccurs="0" maxOccurs="unbounded" ref="s1:description" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:countryOfOrigin" />
+          <s:element minOccurs="0" maxOccurs="1" name="ColorArray" type="tns:ArrayOfColorObject" />
+          <s:element minOccurs="0" maxOccurs="1" name="primaryMaterial" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="SpecificationArray" type="tns:ArrayOfSpecification" />
+          <s:element minOccurs="0" maxOccurs="1" name="shape" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:ApparelSize" />
+          <s:element minOccurs="0" maxOccurs="1" name="Dimension" type="s2:DimensionObject" />
+          <s:element minOccurs="1" maxOccurs="1" name="leadTime" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="unspsc" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="gtin" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="isRushService" nillable="true" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="ProductPackagingArray" type="tns:ArrayOfProductPackagingObject" />
+          <s:element minOccurs="0" maxOccurs="1" name="ShippingPackageArray" type="tns:ArrayOfShippingPackageObject" />
+          <s:element minOccurs="1" maxOccurs="1" ref="s1:endDate" />
+          <s:element minOccurs="1" maxOccurs="1" ref="s1:effectiveDate" />
+          <s:element minOccurs="1" maxOccurs="1" ref="s1:isCloseout" />
+          <s:element minOccurs="1" maxOccurs="1" ref="s1:isCaution" />
+          <s:element minOccurs="0" maxOccurs="1" name="cautionComment" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="nmfcCode" nillable="true" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="nmfcDescription" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="nmfcNumber" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="isOnDemand" nillable="true" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="isHazmat" nillable="true" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="primaryColor" type="tns:ColorObject" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfColorObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Color" nillable="true" type="tns:ColorObject" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ColorObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="colorName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="hex" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="approximatePms" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="standardColorName" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfSpecification">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Specification" nillable="true" type="tns:Specification" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Specification">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="specificationType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="specificationUom" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="measurementValue" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfProductPackagingObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ProductPackage" nillable="true" type="s2:ProductPackagingObject" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfShippingPackageObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ShippingPackage" nillable="true" type="s2:ShippingPackageObject" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfFobPoint">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="FobPoint" nillable="true" type="tns:FobPoint" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="FobPoint">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="fobId" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="fobCity" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="fobState" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="fobPostalCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="fobCountry" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetProductDateModifiedRequest" nillable="true" type="tns:GetProductDateModifiedRequest" />
+      <s:complexType name="GetProductDateModifiedRequest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:wsVersion" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:id" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:password" />
+          <s:element minOccurs="1" maxOccurs="1" ref="s1:changeTimeStamp" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetProductDateModifiedResponse" type="tns:GetProductDateModifiedResponse" />
+      <s:complexType name="GetProductDateModifiedResponse">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ServiceMessageArray" type="tns:ArrayOfServiceMessage" />
+          <s:element minOccurs="0" maxOccurs="1" name="ProductDateModifiedArray" type="tns:ArrayOfProductDateModifiedObject" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfProductDateModifiedObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ProductDateModified" nillable="true" type="s1:ProductDateModifiedObject" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetProductCloseOutRequest" nillable="true" type="tns:GetProductCloseOutRequest" />
+      <s:complexType name="GetProductCloseOutRequest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:wsVersion" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:id" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:password" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetProductCloseOutResponse" type="tns:GetProductCloseOutResponse" />
+      <s:complexType name="GetProductCloseOutResponse">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ServiceMessageArray" type="tns:ArrayOfServiceMessage" />
+          <s:element minOccurs="0" maxOccurs="1" name="ProductCloseOutArray" type="tns:ArrayOfProductCloseOutObject" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfProductCloseOutObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ProductCloseOut" nillable="true" type="s1:ProductCloseOutObject" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetProductSellableRequest" nillable="true" type="tns:GetProductSellableRequest" />
+      <s:complexType name="GetProductSellableRequest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:wsVersion" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:id" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:password" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:productId" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:partId" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:localizationCountry" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:localizationLanguage" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:lineName" />
+          <s:element minOccurs="1" maxOccurs="1" ref="s1:isSellable" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetProductSellableResponse" type="s3:GetProductSellableResponse" />
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.promostandards.org/WSDL/ProductDataService/2.0.0/SharedObjects/">
+      <s:element name="wsVersion" type="s:string" />
+      <s:element name="id" type="s:string" />
+      <s:element name="password" type="s:string" />
+      <s:element name="localizationCountry" type="s:string" />
+      <s:element name="localizationLanguage" type="s:string" />
+      <s:element name="productId" type="s:string" />
+      <s:element name="partId" type="s:string" />
+      <s:element name="colorName" type="s:string" />
+      <s:element name="ApparelSizeArray" type="s1:ApparelSizeObject" />
+      <s:complexType name="ApparelSizeObject">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="apparelStyle" type="s1:apparelStyles" />
+          <s:element minOccurs="1" maxOccurs="1" name="labelSize" type="s1:labelSizes" />
+          <s:element minOccurs="0" maxOccurs="1" name="customSize" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="apparelStyles">
+        <s:restriction base="s:string">
+          <s:enumeration value="Unisex" />
+          <s:enumeration value="Youth" />
+          <s:enumeration value="Girls" />
+          <s:enumeration value="Boys" />
+          <s:enumeration value="Womens" />
+          <s:enumeration value="WomensTall" />
+          <s:enumeration value="Mens" />
+          <s:enumeration value="MensTall" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="labelSizes">
+        <s:restriction base="s:string">
+          <s:enumeration value="L" />
+          <s:enumeration value="M" />
+          <s:enumeration value="S" />
+          <s:enumeration value="XL" />
+          <s:enumeration value="XS" />
+          <s:enumeration value="2XL" />
+          <s:enumeration value="3XL" />
+          <s:enumeration value="OSFA" />
+          <s:enumeration value="4XS" />
+          <s:enumeration value="3XS" />
+          <s:enumeration value="2XS" />
+          <s:enumeration value="4XL" />
+          <s:enumeration value="5XL" />
+          <s:enumeration value="CUSTOM" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="productName" type="s:string" />
+      <s:element name="description" type="s:string" />
+      <s:element name="priceExpiresDate" type="s:dateTime" />
+      <s:complexType name="ArrayOfProductKeywordObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ProductKeyword" nillable="true" type="s1:ProductKeywordObject" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ProductKeywordObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="keyword" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="productBrand" type="s:string" />
+      <s:complexType name="ArrayOfProductCategoryObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ProductCategory" nillable="true" type="s1:ProductCategoryObject" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ProductCategoryObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="category" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="subCategory" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfRelatedProductObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="RelatedProduct" nillable="true" type="s1:RelatedProductObject" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="RelatedProductObject">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="relationType" type="s1:relationTypes" />
+          <s:element minOccurs="0" maxOccurs="1" name="productId" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="partId" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="relationTypes">
+        <s:restriction base="s:string">
+          <s:enumeration value="Substitute" />
+          <s:enumeration value="CompanionSell" />
+          <s:enumeration value="CommonGrouping" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="primaryImageURL" type="s:string" />
+      <s:complexType name="ArrayOfProductPriceGroup">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ProductPriceGroup" nillable="true" type="s1:ProductPriceGroup" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ProductPriceGroup">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="groupName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="currency" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="description" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ProductPriceArray" type="s1:ArrayOfProductPrice" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfProductPrice">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ProductPrice" nillable="true" type="s1:ProductPrice" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ProductPrice">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="quantityMax" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="quantityMin" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="price" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="discountCode" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="complianceInfoAvailable" nillable="true" type="s:boolean" />
+      <s:element name="countryOfOrigin" type="s:string" />
+      <s:element name="ApparelSize" type="s1:ApparelSizeObject" />
+      <s:element name="endDate" type="s:dateTime" />
+      <s:element name="effectiveDate" type="s:dateTime" />
+      <s:element name="isCloseout" nillable="true" type="s:boolean" />
+      <s:element name="isCaution" nillable="true" type="s:boolean" />
+      <s:element name="changeTimeStamp" type="s:dateTime" />
+      <s:complexType name="ProductDateModifiedObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="productId" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="partId" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ProductCloseOutObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="productId" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="partId" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="lineName" type="s:string" />
+      <s:element name="isSellable" nillable="true" type="s:boolean" />
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.promostandards.org/WSDL/ProductDataService/1.0.0/SharedObjects/">
+      <s:import namespace="http://www.promostandards.org/WSDL/ProductDataService/1.0.0/" />
+      <s:complexType name="DimensionObject">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="dimensionUom" type="s2:dimensionUoms" />
+          <s:element minOccurs="1" maxOccurs="1" name="depth" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="height" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="width" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="weightUom" type="s2:weightUoms" />
+          <s:element minOccurs="1" maxOccurs="1" name="weight" type="s:decimal" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="dimensionUoms">
+        <s:restriction base="s:string">
+          <s:enumeration value="MM" />
+          <s:enumeration value="CM" />
+          <s:enumeration value="MR" />
+          <s:enumeration value="IN" />
+          <s:enumeration value="FT" />
+          <s:enumeration value="YD" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="weightUoms">
+        <s:restriction base="s:string">
+          <s:enumeration value="ME" />
+          <s:enumeration value="KG" />
+          <s:enumeration value="OZ" />
+          <s:enumeration value="LB" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="ProductPackagingObject">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" ref="s3:default" />
+          <s:element minOccurs="0" maxOccurs="1" name="packageType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="description" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="quantity" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="dimensionUom" type="s2:dimensionUoms" />
+          <s:element minOccurs="1" maxOccurs="1" name="depth" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="height" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="width" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="weightUom" type="s2:weightUoms" />
+          <s:element minOccurs="1" maxOccurs="1" name="weight" type="s:decimal" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ShippingPackageObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="packageType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="description" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="quantity" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="dimensionUom" type="s2:dimensionUoms" />
+          <s:element minOccurs="1" maxOccurs="1" name="depth" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="height" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="width" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="weightUom" type="s2:weightUoms" />
+          <s:element minOccurs="1" maxOccurs="1" name="weight" type="s:decimal" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ProductSellableObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="productId" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="partId" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.promostandards.org/WSDL/ProductDataService/1.0.0/">
+      <s:import namespace="http://www.promostandards.org/WSDL/ProductDataService/1.0.0/SharedObjects/" />
+      <s:element name="default" type="s:boolean" />
+      <s:complexType name="GetProductSellableResponse">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ServiceMessageArray" type="s3:ArrayOfServiceMessage" />
+          <s:element minOccurs="0" maxOccurs="1" name="ProductSellableArray" type="s3:ArrayOfProductSellableObject" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfServiceMessage">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ServiceMessage" nillable="true" type="s3:ServiceMessage" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ServiceMessage">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="code" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="description" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="severity" type="s3:Severitys" />
+          <s:element minOccurs="0" maxOccurs="1" name="stacktrace" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="Severitys">
+        <s:restriction base="s:string">
+          <s:enumeration value="Error" />
+          <s:enumeration value="Information" />
+          <s:enumeration value="Warning" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="ArrayOfProductSellableObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ProductSellable" nillable="true" type="s2:ProductSellableObject" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="getProductSoapIn">
+    <wsdl:part name="request" element="tns:GetProductRequest" />
+  </wsdl:message>
+  <wsdl:message name="getProductSoapOut">
+    <wsdl:part name="getProductResult" element="tns:GetProductResponse" />
+  </wsdl:message>
+  <wsdl:message name="getProductDateModifiedSoapIn">
+    <wsdl:part name="request" element="tns:GetProductDateModifiedRequest" />
+  </wsdl:message>
+  <wsdl:message name="getProductDateModifiedSoapOut">
+    <wsdl:part name="getProductDateModifiedResult" element="tns:GetProductDateModifiedResponse" />
+  </wsdl:message>
+  <wsdl:message name="getProductCloseOutSoapIn">
+    <wsdl:part name="request" element="tns:GetProductCloseOutRequest" />
+  </wsdl:message>
+  <wsdl:message name="getProductCloseOutSoapOut">
+    <wsdl:part name="getProductCloseOutResult" element="tns:GetProductCloseOutResponse" />
+  </wsdl:message>
+  <wsdl:message name="getProductSellableSoapIn">
+    <wsdl:part name="request" element="tns:GetProductSellableRequest" />
+  </wsdl:message>
+  <wsdl:message name="getProductSellableSoapOut">
+    <wsdl:part name="getProductSellableResult" element="tns:GetProductSellableResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ProductData200Soap">
+    <wsdl:operation name="getProduct">
+      <wsdl:input message="tns:getProductSoapIn" />
+      <wsdl:output message="tns:getProductSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getProductDateModified">
+      <wsdl:input message="tns:getProductDateModifiedSoapIn" />
+      <wsdl:output message="tns:getProductDateModifiedSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getProductCloseOut">
+      <wsdl:input message="tns:getProductCloseOutSoapIn" />
+      <wsdl:output message="tns:getProductCloseOutSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getProductSellable">
+      <wsdl:input message="tns:getProductSellableSoapIn" />
+      <wsdl:output message="tns:getProductSellableSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ProductData200Soap" type="tns:ProductData200Soap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getProduct">
+      <soap:operation soapAction="getProduct" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getProductDateModified">
+      <soap:operation soapAction="getProductDateModified" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getProductCloseOut">
+      <soap:operation soapAction="getProductCloseOut" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getProductSellable">
+      <soap:operation soapAction="getProductSellable" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ProductData200Soap12" type="tns:ProductData200Soap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getProduct">
+      <soap12:operation soapAction="getProduct" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getProductDateModified">
+      <soap12:operation soapAction="getProductDateModified" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getProductCloseOut">
+      <soap12:operation soapAction="getProductCloseOut" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getProductSellable">
+      <soap12:operation soapAction="getProductSellable" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ProductData200">
+    <wsdl:port name="ProductData200Soap" binding="tns:ProductData200Soap">
+      <soap:address location="https://api.cbcorporate.com/promostandards/ProductData200.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ProductData200Soap12" binding="tns:ProductData200Soap12">
+      <soap12:address location="https://api.cbcorporate.com/promostandards/ProductData200.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,532 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://www.promostandards.org/WSDL/PO/1.0.0/" xmlns:s1="http://www.promostandards.org/WSDL/PO/1.0.0/SharedObjects/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" targetNamespace="http://www.promostandards.org/WSDL/PO/1.0.0/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.promostandards.org/WSDL/PO/1.0.0/">
+      <s:import namespace="http://www.promostandards.org/WSDL/PO/1.0.0/SharedObjects/" />
+      <s:element name="GetSupportedOrderTypesRequest" nillable="true" type="tns:GetSupportedOrderTypesRequest" />
+      <s:complexType name="GetSupportedOrderTypesRequest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:wsVersion" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:id" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:password" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetSupportedOrderTypesResponse" type="tns:GetSupportedOrderTypesResponse" />
+      <s:complexType name="GetSupportedOrderTypesResponse">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:ErrorMessage" />
+          <s:element minOccurs="0" maxOccurs="unbounded" ref="s1:SupportedOrderTypes" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="SendPORequest" nillable="true" type="tns:SendPurchaseOrderRequest" />
+      <s:complexType name="SendPurchaseOrderRequest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:wsVersion" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:id" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:password" />
+          <s:element minOccurs="0" maxOccurs="1" name="PO" type="tns:PurchaseOrderObject" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="PurchaseOrderObject">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="orderType" type="tns:orderTypes" />
+          <s:element minOccurs="0" maxOccurs="1" name="orderNumber" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="orderDate" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="lastModified" nillable="true" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="totalAmount" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="paymentTerms" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="rush" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:currency" />
+          <s:element minOccurs="0" maxOccurs="1" name="OrderContactArray" type="s1:ArrayOfContactObject" />
+          <s:element minOccurs="0" maxOccurs="1" name="ShipmentArray" type="s1:ArrayOfShipmentObject" />
+          <s:element minOccurs="0" maxOccurs="1" name="LineItemArray" type="tns:ArrayOfLineItemObject" />
+          <s:element minOccurs="0" maxOccurs="1" name="termsAndConditions" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="salesChannel" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="promoCode" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="orderTypes">
+        <s:restriction base="s:string">
+          <s:enumeration value="Blank" />
+          <s:enumeration value="Sample" />
+          <s:enumeration value="Simple" />
+          <s:enumeration value="Configured" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="ArrayOfLineItemObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="LineItem" nillable="true" type="tns:LineItemObject" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="LineItemObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="lineNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:description" />
+          <s:element minOccurs="1" maxOccurs="1" name="lineType" type="tns:lineTypes" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:Quantity" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:fobId" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:ToleranceDetails" />
+          <s:element minOccurs="1" maxOccurs="1" name="allowPartialShipments" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" ref="s1:unitPrice" />
+          <s:element minOccurs="1" maxOccurs="1" name="lineItemTotal" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="requestedShipDate" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="requestedInHandsDate" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="referenceSalesQuote" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:Program" />
+          <s:element minOccurs="0" maxOccurs="1" name="endCustomerSalesOrder" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:productId" />
+          <s:element minOccurs="0" maxOccurs="1" name="customerProductId" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" ref="s1:lineItemGroupingId" />
+          <s:element minOccurs="0" maxOccurs="1" name="PartArray" type="s1:ArrayOfPartObject" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:Configuration" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="lineTypes">
+        <s:restriction base="s:string">
+          <s:enumeration value="New" />
+          <s:enumeration value="Repeat" />
+          <s:enumeration value="Reference" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="SendPOResponse" type="tns:SendPurchaseOrderResponse" />
+      <s:complexType name="SendPurchaseOrderResponse">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="transactionId" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" ref="s1:ServiceMessageArray" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.promostandards.org/WSDL/PO/1.0.0/SharedObjects/">
+      <s:element name="wsVersion" type="s:string" />
+      <s:element name="id" type="s:string" />
+      <s:element name="password" type="s:string" />
+      <s:element name="ErrorMessage" type="s1:ErrorMessage" />
+      <s:complexType name="ErrorMessage">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="code" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="description" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="stacktrace" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="SupportedOrderTypes" type="s1:orderTypes" />
+      <s:simpleType name="orderTypes">
+        <s:restriction base="s:string">
+          <s:enumeration value="Blank" />
+          <s:enumeration value="Sample" />
+          <s:enumeration value="Simple" />
+          <s:enumeration value="Configured" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="currency" type="s:string" />
+      <s:complexType name="ArrayOfContactObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Contact" nillable="true" type="s1:ContactObject" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ContactObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="accountName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="accountNumber" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="contactType" type="s1:contactTypes" />
+          <s:element minOccurs="0" maxOccurs="1" name="ContactDetails" type="s1:ContactDetailsObject" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="contactTypes">
+        <s:restriction base="s:string">
+          <s:enumeration value="Art" />
+          <s:enumeration value="Bill" />
+          <s:enumeration value="Expeditor" />
+          <s:enumeration value="Order" />
+          <s:enumeration value="Sales" />
+          <s:enumeration value="Ship" />
+          <s:enumeration value="Sold" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="ContactDetailsObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="attentionTo" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="companyName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="address1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="address2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="address3" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="city" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="region" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="postalCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="country" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="email" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="phone" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="comments" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfShipmentObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Shipment" nillable="true" type="s1:ShipmentObject" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ShipmentObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="shipReferences" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="comments" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ThirdPartyAccount" type="s1:ThirdPartyAccountObject" />
+          <s:element minOccurs="1" maxOccurs="1" name="allowConsolidation" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="blindShip" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="packingListRequired" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="FreightDetails" type="s1:FreightDetailsObject" />
+          <s:element minOccurs="0" maxOccurs="1" name="ShipTo" type="s1:ShipToObject" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ThirdPartyAccountObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="accountName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="accountNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ContactDetails" type="s1:ContactDetailsObject" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="FreightDetailsObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="carrier" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="service" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ShipToObject">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="customerPickup" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="ContactDetails" type="s1:ContactDetailsObject" />
+          <s:element minOccurs="1" maxOccurs="1" name="shipmentId" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="description" type="s:string" />
+      <s:element name="Quantity" type="s1:QuantityObject" />
+      <s:complexType name="QuantityObject">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="uom" type="s1:quantities" />
+          <s:element minOccurs="1" maxOccurs="1" name="value" type="s:decimal" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="quantities">
+        <s:restriction base="s:string">
+          <s:enumeration value="BX" />
+          <s:enumeration value="CA" />
+          <s:enumeration value="DZ" />
+          <s:enumeration value="EA" />
+          <s:enumeration value="KT" />
+          <s:enumeration value="PR" />
+          <s:enumeration value="PK" />
+          <s:enumeration value="RL" />
+          <s:enumeration value="ST" />
+          <s:enumeration value="SL" />
+          <s:enumeration value="TH" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="fobId" type="s:string" />
+      <s:element name="ToleranceDetails" type="s1:ToleranceDetailsObject" />
+      <s:complexType name="ToleranceDetailsObject">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="uom" type="s1:toleranceUoms" />
+          <s:element minOccurs="1" maxOccurs="1" name="value" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="tolerance" type="s1:tolerances" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="toleranceUoms">
+        <s:restriction base="s:string">
+          <s:enumeration value="Percent" />
+          <s:enumeration value="Quantity" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="tolerances">
+        <s:restriction base="s:string">
+          <s:enumeration value="AllowOverRun" />
+          <s:enumeration value="AllowUnderrun" />
+          <s:enumeration value="AllowOverrunOrUnderrun" />
+          <s:enumeration value="ExactOnly" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="unitPrice" type="s:double" />
+      <s:element name="Program" type="s1:ProgramPricingObject" />
+      <s:complexType name="ProgramPricingObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="id" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="name" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="productId" type="s:string" />
+      <s:element name="lineItemGroupingId" type="s:int" />
+      <s:complexType name="ArrayOfPartObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Part" nillable="true" type="s1:PartObject" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="PartObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="partGroup" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="partId" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="customerPartId" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="customerSupplied" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="description" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Quantity" type="s1:QuantityObject" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="locationLinkId" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="unitPrice" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="ShipmentLinkArray" type="s1:ArrayOfShipmentLinkObject" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfShipmentLinkObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ShipmentLink" nillable="true" type="s1:ShipmentLinkObject" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ShipmentLinkObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Quantity" type="s1:QuantityObject" />
+          <s:element minOccurs="1" maxOccurs="1" name="shipmentId" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="Configuration" type="s1:ConfigurationObject" />
+      <s:complexType name="ConfigurationObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ChargeArray" type="s1:ArrayOfChargeObject" />
+          <s:element minOccurs="0" maxOccurs="1" name="LocationArray" type="s1:ArrayOfLocationObject" />
+          <s:element minOccurs="1" maxOccurs="1" name="referenceNumberType" type="s1:referenceNumberTypes" />
+          <s:element minOccurs="0" maxOccurs="1" name="referenceNumber" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="preProductionProof" type="s:boolean" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfChargeObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Charge" nillable="true" type="s1:ChargeObject" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ChargeObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="chargeName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="description" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="unitPrice" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="chargeId" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="chargeType" type="s1:chargeTypes" />
+          <s:element minOccurs="0" maxOccurs="1" name="Quantity" type="s1:QuantityObject" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="chargeTypes">
+        <s:restriction base="s:string">
+          <s:enumeration value="Freight" />
+          <s:enumeration value="Order" />
+          <s:enumeration value="Run" />
+          <s:enumeration value="Setup" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="ArrayOfLocationObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Location" nillable="true" type="s1:LocationObject" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="LocationObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="locationName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DecorationArray" type="s1:ArrayOfDecorationObject" />
+          <s:element minOccurs="1" maxOccurs="1" name="locationLinkId" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="locationId" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfDecorationObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Decoration" nillable="true" type="s1:DecorationObject" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="DecorationObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="decorationName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Artwork" type="s1:ArtworkObject" />
+          <s:element minOccurs="1" maxOccurs="1" name="decorationId" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArtworkObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="instructions" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="refArtworkId" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="totalStitchCount" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="ArtworkFileArray" type="s1:ArrayOfArtworkFileObject" />
+          <s:element minOccurs="0" maxOccurs="1" name="description" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Dimensions" type="s1:DimensionsObject" />
+          <s:element minOccurs="0" maxOccurs="1" name="Layers" type="s1:LayerObject" />
+          <s:element minOccurs="0" maxOccurs="1" name="TypesetArray" type="s1:ArrayOfTypeSetObject" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfArtworkFileObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ArtworkFile" nillable="true" type="s1:ArtworkFileObject" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArtworkFileObject">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="artworkType" type="s1:artworkTypes" />
+          <s:element minOccurs="0" maxOccurs="1" name="fileLocation" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="fileName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="transportMechanism" type="s1:transportMechanisms" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="artworkTypes">
+        <s:restriction base="s:string">
+          <s:enumeration value="NonProductionReady" />
+          <s:enumeration value="ProductionReady" />
+          <s:enumeration value="SupplierArtTemplate" />
+          <s:enumeration value="VirtualProof" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="transportMechanisms">
+        <s:restriction base="s:string">
+          <s:enumeration value="ArtworkToFollow" />
+          <s:enumeration value="Email" />
+          <s:enumeration value="Ftp" />
+          <s:enumeration value="Url" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="DimensionsObject">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="diameter" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="height" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="uom" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="width" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="useMaxLocationDimensions" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="geometry" type="s1:geometries" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="geometries">
+        <s:restriction base="s:string">
+          <s:enumeration value="Circle" />
+          <s:enumeration value="Rectangle" />
+          <s:enumeration value="Other" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="LayerObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="colorSystem" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LayerOrStopArray" type="s1:ArrayOfLayerOrStopObject" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfLayerOrStopObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="LayerOrStop" nillable="true" type="s1:LayerOrStopObject" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="LayerOrStopObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="color" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="nameOrNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="description" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfTypeSetObject">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Typeset" nillable="true" type="s1:TypeSetObject" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="TypeSetObject">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="fontSize" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="font" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="sequenceNumber" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="value" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="referenceNumberTypes">
+        <s:restriction base="s:string">
+          <s:enumeration value="PurchaseOrder" />
+          <s:enumeration value="SalesOrder" />
+          <s:enumeration value="JobOrWorkOrder" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="ServiceMessageArray" type="s1:ArrayOfServiceMessage" />
+      <s:complexType name="ArrayOfServiceMessage">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ServiceMessage" nillable="true" type="s1:ServiceMessage" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ServiceMessage">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="code" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="description" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="severity" type="s1:Severitys" />
+          <s:element minOccurs="0" maxOccurs="1" name="stacktrace" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="Severitys">
+        <s:restriction base="s:string">
+          <s:enumeration value="Error" />
+          <s:enumeration value="Information" />
+          <s:enumeration value="Warning" />
+        </s:restriction>
+      </s:simpleType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="getSupportedOrderTypesSoapIn">
+    <wsdl:part name="request" element="tns:GetSupportedOrderTypesRequest" />
+  </wsdl:message>
+  <wsdl:message name="getSupportedOrderTypesSoapOut">
+    <wsdl:part name="getSupportedOrderTypesResult" element="tns:GetSupportedOrderTypesResponse" />
+  </wsdl:message>
+  <wsdl:message name="sendPOSoapIn">
+    <wsdl:part name="request" element="tns:SendPORequest" />
+  </wsdl:message>
+  <wsdl:message name="sendPOSoapOut">
+    <wsdl:part name="sendPOResult" element="tns:SendPOResponse" />
+  </wsdl:message>
+  <wsdl:portType name="PurchaseOrderSoap">
+    <wsdl:operation name="getSupportedOrderTypes">
+      <wsdl:input message="tns:getSupportedOrderTypesSoapIn" />
+      <wsdl:output message="tns:getSupportedOrderTypesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="sendPO">
+      <wsdl:input message="tns:sendPOSoapIn" />
+      <wsdl:output message="tns:sendPOSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="PurchaseOrderSoap" type="tns:PurchaseOrderSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getSupportedOrderTypes">
+      <soap:operation soapAction="getSupportedOrderTypes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendPO">
+      <soap:operation soapAction="sendPO" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="PurchaseOrderSoap12" type="tns:PurchaseOrderSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getSupportedOrderTypes">
+      <soap12:operation soapAction="getSupportedOrderTypes" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendPO">
+      <soap12:operation soapAction="sendPO" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="PurchaseOrder">
+    <wsdl:port name="PurchaseOrderSoap" binding="tns:PurchaseOrderSoap">
+      <soap:address location="https://api.cbcorporate.com/promostandards/PurchaseOrder.asmx" />
+    </wsdl:port>
+    <wsdl:port name="PurchaseOrderSoap12" binding="tns:PurchaseOrderSoap12">
+      <soap12:address location="https://api.cbcorporate.com/promostandards/PurchaseOrder.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
