@@ -92,3 +92,85 @@ Observations/SupplyMaster-Observations-Log.md
 - **Fulfillment model:** Model A -- C&B holds dedicated Torrey Pines pre-decorated SKUs; PromoStandards PO auto-submitted at time of sale; blind drop-ship to buyer
 - **Master project doc:** SupplyMaster Docs/Project-Overview-SupplyMaster-CutterBuck.md
 - **All SupplyMaster reference docs:** SupplyMaster Docs/ folder
+
+## Dropbox Environment Notes
+
+> **Purpose:** Document the Dropbox + VS Code environment configuration required to prevent file-write crashes in this workspace.
+> **Last Updated:** 2026-06-21
+
+---
+
+### The Problem
+
+VS Code's diff editor (`write_to_file`, `replace_in_file`) crashes with "Failed to open diff editor" when the workspace resides in Dropbox-synced folders. This is caused by Dropbox's Smart Sync and file-locking behavior conflicting with VS Code's temporary file operations during saves.
+
+---
+
+### Permanent Workaround (Already in Effect)
+
+**See:** Requirement 1 → "CRITICAL — How to Write to the Observations Log"
+
+- `write_to_file` and `replace_in_file` tools are **avoided entirely** in this workspace
+- All file append operations use `execute_command` + PowerShell `Add-Content`
+- This bypasses the VS Code diff editor crash path
+
+**Example (PowerShell here-string for multi-line append):**
+```powershell
+Add-Content -Path "c:\Users\Mark\Dropbox\TP Tech Projects\Shopify\Shopify SupplyMaster\Observations\SupplyMaster-Observations-Log.md" -Value "`n### OBS-001 -- Example`n- **Date:** 2026-06-17`n..." -Encoding UTF8
+```
+
+---
+
+### Recommended Dropbox Settings
+
+| Setting | Location | Value | Reason |
+|---------|----------|-------|--------|
+| Available Offline | Windows Explorer → folder right-click | Enabled on project root + parent folders | Ensures files are physically present (not placeholders) |
+| Smart Sync | Dropbox desktop app → folder right-click | **Local** (not Smart Sync) | Prevents Dropbox from swapping files in/out during VS Code operations |
+| Sync Status | Dropbox desktop app | Monitor for conflicts | Early warning if Dropbox creates `.dropbox` conflict files |
+
+---
+
+### Recommended VS Code Settings
+
+Add to `settings.json` (User or Workspace):
+
+```json
+{
+  "files.exclude": {
+    "**/.dropbox": true,
+    "**/.dropbox.cache": true,
+    "**/.dropbox.attrs": true
+  },
+  "search.exclude": {
+    "**/.dropbox": true,
+    "**/.dropbox.cache": true,
+    "**/.dropbox.attrs": true
+  },
+  "files.saveConflictResolution": "overwriteFile"
+}
+```
+
+**Why:**
+- Dropbox creates `.dropbox*` metadata files that VS Code can index or conflict with during searches/saves
+- `overwriteFile` reduces temp file churn that Dropbox may lock during sync
+
+---
+
+### One-Time Setup Checklist
+
+A printable configuration checklist is available at:
+**`Dropbox-VSCode-Configuration-Checklist.md`** (workspace root)
+
+Run this checklist when:
+- Setting up this workspace on a new machine
+- Dropbox updates its Smart Sync behavior
+- VS Code releases a major update affecting save mechanisms
+
+---
+
+### Maintenance Notes
+
+- The `files.saveConflictResolution` setting can be reverted to default (`"askUser"`) after 30 days of crash-free operation if desired
+- Revisit this section if crashes recur after a Dropbox or VS Code update
+- The PowerShell `Add-Content` workaround remains the authoritative fix for all file appends in this workspace

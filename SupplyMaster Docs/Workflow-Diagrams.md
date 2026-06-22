@@ -1,4 +1,4 @@
-# SupplyMaster Workflow Diagrams
+﻿# SupplyMaster Workflow Diagrams
 
 > **Project:** Shopify SupplyMaster x Cutter and Buck -- The Golf Shop at Torrey Pines
 > **Purpose:** Text-based workflow diagrams for coworker briefing on app setup, product import, and order PO generation.
@@ -262,65 +262,82 @@
 
 ---
 
-## DIAGRAM 5 -- Counter Sale (In-Store to Shopify Order) Workflow
+## DIAGRAM 5 -- Counter Sale (Walk-In / In-Store Order)
 
-    COUNTER SALE WORKFLOW -- IN-STORE TO SHOPIFY ORDER
-    ====================================================
+    COUNTER SALE WORKFLOW -- WALK-IN CUSTOMER AT THE GOLF SHOP
+    ============================================================
 
     CONTEXT:
     ---------
-    When a customer purchases a C and B pre-decorated item in person at the
-    Golf Shop, the sale is rung through NCR CounterPoint (POS). Because C and B
-    ships direct (blind drop-ship), a corresponding Shopify order must be created
-    so SupplyMaster can submit the PromoStandards PO to C and B.
+    When a walk-in customer purchases a pre-decorated C and B item in person
+    at the Golf Shop, the Shopify order IS the base transaction record.
+    SupplyMaster processes the C and B line items exactly as it would any
+    online order -- detecting the SKU match, submitting the PromoStandards PO
+    to C and B, and writing the tracking number back to Shopify when C and B
+    ships.
+
+    The NCR CounterPoint in-store POS system is updated from the Shopify
+    invoice AFTER the SupplyMaster workflow is complete. That step is a
+    separate in-store double-entry workflow and is entirely outside the scope
+    of this document.
 
     CURRENT PROCESS (Manual -- Phase 1):
     --------------------------------------
 
-    [Customer purchases at counter -- NCR CounterPoint]
+    [Walk-in customer selects C and B item at the Golf Shop counter]
          |
          v
-    Ring sale in CounterPoint as normal
+    Staff opens Shopify Admin (desktop or iPad)
          |
          v
-    Open Shopify Admin on desktop/iPad
-         |
-         v
-    Create Draft Order in Shopify Admin:
-         +-- Add customer (or Guest)
-         +-- Add C and B product variant (by SKU or title search)
+    Create order in Shopify:
+         +-- Add customer (search by name/email, or use Guest)
+         +-- Add C and B product variant (search by title or SKU)
          +-- Set quantity
-         +-- Set price to match CounterPoint transaction
-         +-- Add note: Counter sale -- CounterPoint [transaction number]
+         +-- Confirm price reflects the margin formula
+         +-- Enter customer shipping address
+              (C and B ships direct to customer -- blind ship)
+         +-- Collect payment -> mark order as Paid in Shopify
          |
          v
-    Mark order as Paid (payment collected in-store via CounterPoint)
+    Shopify order placed -- Shopify is the base transaction record
          |
          v
-    Order appears in SupplyMaster App Orders tab
+    SupplyMaster detects C and B SKU match on the order line items
          |
          v
-    Submit PO to C and B (Manual mode: click Submit Now)
+    [SupplyMaster workflow takes over -- see Diagram 3 and Diagram 7]
          |
          v
-    C and B ships pre-decorated item directly to customer
+    Manual mode: go to App Orders tab -> click Submit Now
+    (once Phase 2a is active, this step is automatic)
+         |
+         v
+    PO submitted to C and B via PromoStandards API
+         |
+         v
+    C and B processes and ships pre-decorated item directly to customer
     (Blind Ship -- ships under Torrey Pines branding)
          |
          v
-    Tracking number synced back into Shopify order
+    Tracking number synced back into Shopify order automatically
          |
          v
-    Notify customer of shipment (Shopify order notification email)
+    Customer receives shipping notification email with tracking link
+         |
+         v
+    [SupplyMaster workflow complete]
+         |
+         v
+    [SEPARATE WORKFLOW -- outside scope of this document]
+    NCR CounterPoint updated from the Shopify invoice
 
-    NOTE: Order Sync must be set to Manually Fulfill Orders during Phase 1.
-    Switch to Automatically Fulfill Orders (Phase 2a) only after 5-10 manual
-    POs confirm the flow is correct end-to-end.
-
-    FUTURE STATE (Phase 2d -- after standardized procedure):
-    ---------------------------------------------------------
-    Evaluate a CounterPoint -> Shopify connector or Zapier bridge to reduce
-    the manual double-entry step. Standardize a Shopify draft order template
-    with pre-filled C and B product fields before automating.
+    PHASE 2 NOTE (Phase 2a):
+    ------------------------
+    Once Order Sync is switched to Automatically Fulfill Orders,
+    the PO submission step requires no manual click -- SupplyMaster
+    sends the PO to C and B automatically within ~30 minutes of the
+    Shopify order being placed.
 
 ---
 
@@ -352,4 +369,321 @@
     Product Type   ->  Not yet mapped
     Weight         ->  Needs modifier: default 0.35 when zero
     Country Code   ->  Needs modifier: 2-letter ISO slice
+
+
+---
+
+## DIAGRAM 6 -- Field Mapping Deep Dive
+
+    FIELD MAPPING PIPELINE (HOW MATCH FIELDS WORKS)
+    =================================================
+
+    CONCEPT:
+    ---------
+    SupplyMaster reads raw data from the C and B supplier feed and writes it
+    into Shopify product and variant fields. Match Fields is where each mapping
+    rule is defined. Every rule has three parts:
+
+    [C and B Source Field]
+              |
+              v
+    [Optional Liquid Modifier]    <- math, text, conditionals, or none
+              |
+              v
+    [Shopify Destination Field]
+
+    If no modifier: raw supplier value is written directly.
+    If modifier applied: Liquid formula transforms the value before writing.
+
+    HOW TO ACCESS:
+    ---------------
+    SupplyMaster -> Edit Supplier -> Product Settings -> Match Fields tab
+
+    PRODUCT-LEVEL MAPPINGS:
+    ------------------------
+
+    C and B Source         Modifier                          Shopify Destination
+    -----------------------------------------------------------------------
+    title               -> Torrey Pines {{ title }}       -> Title
+                           (plain text prepend)
+    descriptionHtml     -> none (raw supplier copy)        -> Description (HTML)
+                           OR AI_description (if AI+)
+    vendor / brandName  -> none                            -> Vendor
+    category            -> none                            -> Tags (drives Smart Collections)
+    AI_tags             -> none (requires AI+)             -> Tags (program tags)
+    AI_gender           -> none (requires AI+)             -> Tags (Men's / Women's)
+
+    VARIANT-LEVEL MAPPINGS:
+    ------------------------
+
+    C and B Source         Modifier                          Shopify Destination
+    -----------------------------------------------------------------------
+    sku                 -> NONE -- do not modify             -> Variant SKU
+                           [!] SKU must match C and B format exactly
+                               for PromoStandards PO to route correctly
+    cost                -> Tiered margin formula (below)     -> Variant Price
+    msrp                -> none                              -> Compare At Price
+    availableQuantity   -> none                              -> Inventory Quantity
+    color               -> none                              -> Option 1 (Color)
+    size                -> none                              -> Option 2 (Size)
+    weight              -> Default formula (below)           -> Variant Weight
+    countryOfOrigin     -> ISO slice formula (below)         -> Country Code of Origin
+    primaryImageURL     -> none                              -> Product Images
+    colorSwatchImageURL -> none (or metafield mapping)       -> Color Swatch (advanced)
+
+    MODIFIER EXAMPLES:
+    -------------------
+
+    Title prefix:
+         Torrey Pines {{ title }}
+         Output example: Torrey Pines CB Drytec Polo
+
+    Tiered margin pricing (Variant Price modifier):
+         {% assign p = variant.cost %}
+         {% if p <= 30 %}{{ p | times: 2.2 | round: 2 }}
+         {% elsif p <= 70 %}{{ p | times: 1.9 | round: 2 }}
+         {% elsif p <= 120 %}{{ p | times: 1.7 | round: 2 }}
+         {% else %}{{ p | times: 1.5 | round: 2 }}
+         {% endif %}
+         Example: cost = $55.00 -> price = $104.50 (~47% gross margin)
+
+    Weight default when supplier reports zero:
+         {% if variant.weight == 0 %}0.35{% else %}{{ variant.weight }}{% endif %}
+         Output: 0.35 lbs if zero reported; otherwise uses actual weight
+
+    Country of origin -- 2-letter ISO code:
+         {{ variant.countryOfOrigin | slice: 0, 2 }}
+         Output example: VN from VNM or Vietnam
+
+    AI+ FIELD DEFAULTS (requires $99 one-time activation):
+    -------------------------------------------------------
+    When AI+ is enabled, click Add AI+ Field Defaults in Match Fields.
+    SupplyMaster pre-loads mappings for:
+         AI_cleanTitle            -> Title (replaces raw supplier title)
+         AI_description           -> Description (SEO-optimized copy)
+         AI_tags                  -> Tags (program, material, fit tags)
+         AI_gender                -> Tags (Men's / Women's)
+         AI_shopifyProductCategoryId -> Shopify Category (standard taxonomy)
+
+    MODIFIER EDITOR -- HOW TO USE:
+    --------------------------------
+    1. In Match Fields, click the pencil icon next to any source field
+    2. The Modify editor opens -- enter Liquid code in the text area
+    3. Click Preview pane -- SupplyMaster runs the formula against real
+       C and B sample data and shows the output value
+    4. Verify the output is correct before clicking Save
+    5. Purple wand icon: describe target in plain English -- SupplyMaster
+       generates the Liquid code for you (AI Assist)
+
+    IMPORTANT RULES:
+    -----------------
+    [!] Do NOT apply a modifier to SKU -- raw SKU must pass through unchanged
+    [!] Always verify pricing modifier in Preview before saving
+    [!] Modifiers apply on every import AND every auto sync
+    [!] Fields not mapped here will not be populated in Shopify
+
+
+---
+
+## DIAGRAM 7 -- PromoStandards Order Flow (Detailed)
+
+    PROMOSTANDARDS ORDER FLOW -- DETAILED
+    ========================================
+
+    WHAT IS PROMOSTANDARDS?
+    ------------------------
+    PromoStandards is an industry-wide API protocol used by promotional
+    products and wholesale apparel suppliers (including Cutter and Buck,
+    SanMar, and ACC) to accept purchase orders electronically and return
+    order status and tracking data -- without email, phone, or manual entry.
+
+    SupplyMaster acts as the bridge:
+         Shopify order  ->  SupplyMaster  ->  PromoStandards API  ->  C and B
+
+    TWO SEPARATE CREDENTIAL SETS:
+    ------------------------------
+    [1] Catalog / Product Sync Credentials
+         -- Used to fetch the C and B product feed (pricing, inventory, images)
+         -- NOT required for Cutter and Buck -- catalog connects automatically
+         -- Do not confuse with order credentials
+
+    [2] PromoStandards Order Sync Credentials
+         -- DIFFERENT set of credentials -- required specifically for PO submission
+         -- Username and Password provided by C and B
+         -- Contact: CBEDI@cutterbuck.com to request API access
+         -- Entered in Edit Supplier -> Order Settings
+         -- [!] Without these, SupplyMaster CANNOT submit POs to C and B
+
+    -----------------------------------------------------------------------
+    STEP 1 -- SUPPLYMASTER SKU MATCH CHECK
+    -----------------------------------------------------------------------
+
+    When a Shopify order is placed, SupplyMaster scans every line item:
+
+    [Shopify Order Received]
+         |
+         v
+    For each line item in the order:
+         |
+         +-- Read the Variant SKU from the Shopify product
+         |
+         v
+    Does this SKU exist in the C and B supplier connection?
+         |
+         +-- NO MATCH:
+         |    SKU belongs to a different supplier, a manual product,
+         |    or a Torrey Pines branded item (not dropshipped via C and B)
+         |    -> Line item is SKIPPED -- no PO generated for this item
+         |    -> Other non-C and B items in the same order are unaffected
+         |
+         +-- MATCH:
+              SKU found in C and B supplier feed
+              -> Line item is QUEUED for PO submission
+              -> Appears in SupplyMaster App Orders tab
+              -> Status: PENDING
+
+    [!] WHY SKU ACCURACY IS CRITICAL:
+    The MATCH check uses the exact SKU string stored on the Shopify variant.
+    If the SKU was modified during import (e.g., a prefix was added via a
+    Liquid modifier in Match Fields), the string will NOT match the C and B
+    feed SKU and the order will be skipped silently.
+    -> Always map SKU with NO modifier applied.
+    -> Confirmed correct on test import (OBS-009).
+
+    -----------------------------------------------------------------------
+    STEP 2 -- PO CONSTRUCTION AND SUBMISSION
+    -----------------------------------------------------------------------
+
+    Once a line item is matched and queued:
+
+    [Order Status: PENDING in App Orders]
+         |
+         v
+    Sync Mode check:
+         |
+         +-- MANUALLY FULFILL ORDERS:
+         |    Order waits in App Orders tab
+         |    Staff reviews the queued PO
+         |    Click Submit Now to send
+         |    [!] Torrey Pines current mode -- Phase 1 review period
+         |
+         +-- AUTOMATICALLY FULFILL ORDERS:
+         |    SupplyMaster sends PO automatically every ~30 minutes
+         |    No human action required
+         |    [Switch to this after 5-10 successful manual POs confirmed]
+         |
+         +-- FULFILL AT SCHEDULED TIME:
+              PO batch sent once per day at a configured time
+         |
+         v
+    SupplyMaster constructs the PromoStandards PO:
+
+         PO CONTENTS:
+         +-- PO Number:        e.g., 12345-SHOPIFY
+         |                     (from Dropship PO Number template)
+         +-- Line Items:       C and B SKU + quantity per item
+         +-- Ship-To Address:  Customer shipping address from Shopify order
+         +-- Shipping Carrier: UPS (configured in Order Settings)
+         +-- Shipping Service: GRND PREPAID (configured in Order Settings)
+         +-- Blind Ship Flag:  YES -- C and B ships under Torrey Pines branding
+         |                     (no C and B branding on packing slip)
+         +-- Decoration:       NONE -- pre-decorated SKUs already carry the
+                               Torrey Pines embroidery at C and B; no
+                               decoration instructions needed at order time
+                               (Model A standing program)
+         |
+         v
+    PO transmitted to C and B via PromoStandards Purchase Order API (HTTPS)
+         |
+         v
+    C and B acknowledges receipt -- PO Status: CONFIRMED
+         |
+         v
+    Status updated in SupplyMaster App Orders tab:
+    PENDING -> SUBMITTED -> CONFIRMED
+
+    -----------------------------------------------------------------------
+    STEP 3 -- FULFILLMENT AND TRACKING WRITEBACK
+    -----------------------------------------------------------------------
+
+    After C and B confirms and ships the order:
+
+    [C and B picks, packs, and ships the pre-decorated item]
+         |
+         v
+    C and B generates tracking number (UPS GRND PREPAID)
+         |
+         v
+    C and B posts shipment status via PromoStandards OrderStatus API
+         |
+         v
+    SupplyMaster polls the PromoStandards OrderStatus endpoint periodically
+         |
+         v
+    Tracking number and carrier info retrieved
+         |
+         v
+    SupplyMaster writes tracking data back to Shopify:
+         +-- Fulfillment record created on the Shopify order
+         +-- Carrier: UPS
+         +-- Tracking number populated
+         +-- Fulfillment status: FULFILLED
+         |
+         v
+    Shopify triggers automatic shipping notification email to customer
+    (includes UPS tracking link)
+         |
+         v
+    Order complete -- no manual tracking entry required
+
+    ERROR SCENARIOS:
+    -----------------
+    PO REJECTED by C and B:
+         -- SKU not found in C and B system (wrong SKU format or non-existent)
+         -- Insufficient inventory at C and B
+         -- PromoStandards credentials expired or invalid
+         -> Check App Orders for error detail
+         -> Verify SKU against C and B catalog
+         -> Contact CBEDI@cutterbuck.com if credentials issue
+
+    TRACKING NOT RETURNING:
+         -- C and B has not yet shipped (normal -- allow processing time)
+         -- PromoStandards credentials need refresh
+         -> Check App Orders status; allow 24-48 hours before escalating
+
+    FULL ORDER FLOW SUMMARY:
+    -------------------------
+
+    Customer order (Shopify)
+         |
+         v
+    SupplyMaster SKU MATCH check
+         |
+         +-- No match -> skipped (non-C and B item)
+         +-- Match   -> QUEUED in App Orders
+                            |
+                            v
+                       Manual: click Submit Now
+                       Auto:   sent every ~30 min
+                            |
+                            v
+                       PO transmitted via PromoStandards API
+                            |
+                            v
+                       C and B confirms -> status: CONFIRMED
+                            |
+                            v
+                       C and B ships (blind, pre-decorated)
+                            |
+                            v
+                       PromoStandards OrderStatus returns tracking
+                            |
+                            v
+                       SupplyMaster writes tracking to Shopify order
+                            |
+                            v
+                       Customer receives shipping email with tracking link
+                            |
+                            v
+                       Order FULFILLED -- no manual steps required
 

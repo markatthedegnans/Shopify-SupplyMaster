@@ -31,7 +31,7 @@
             "filenamePattern": "**/*.md"
         },
         "*.copilotmd": "vscode.markdown.preview.editor",
-        "*.md": "vscode.markdown.preview.editor"
+        "*.md": "markdown-preview-enhanced"
     },
 
     "markdown.validate.enabled": true
